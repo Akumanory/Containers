@@ -76,7 +76,9 @@ private:
         // std::cout << std::endl;
         for (int i = 0; i < _count_of_elements; i++)
         {
-            *(temp_array + i) = *(_array + i);
+            T* rep_new = new (temp_array + i) T(*(_array + i));
+
+            // *(temp_array + i) = *(_array + i);
         }
         // DEBUG START
         // std::cout << "Pointer(temp_array) before = operator" << std::endl;
