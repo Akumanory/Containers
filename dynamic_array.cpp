@@ -25,15 +25,58 @@ public:
         free(_array);
     }
 
-    // Вставляет значение в конец массива
     void insert(const T& value) {
         if (_count_of_elements >= _array_capacity)
             resize();
-        
-        *(_array + _count_of_elements) = value;
+        T* placement_new = new (_array + _count_of_elements) T(value);
+        // *(_array + _count_of_elements) = value;
         _count_of_elements++;
     }
 
+    void insert(int index, const T& value) {
+        if (_count_of_elements == _array_capacity || index >= _array_capacity)
+            resize();
+
+        if (index < _count_of_elements)
+        {
+            for (int i = _count_of_elements; i > index; i--)
+            {
+                // *(_array + i + 1) = *(_array + i);
+                // _array + i = nullptr;
+                // *(_array + i + 1) = std::move(*(_array + i));
+                T* placement_new = new (_array + i) T(*(_array + i));
+                *(_array + i + 1) = *(placement_new);
+                placement_new->~T();
+            }
+            T* placement_new = new (_array + index) T(value);
+            _count_of_elements++;
+        }else
+        {
+            if (index > _count_of_elements)
+            {
+                T* placement_new = new (_array + index) T(value);
+                _count_of_elements += index -_count_of_elements + 1;
+            }else
+            {
+                insert(value);
+            }
+            
+        }
+    }
+
+    void remove(int index) {
+        if (index <= _count_of_elements && index >= _count_of_elements)
+        {
+            T* placement_new = new (_array + index) T();
+            placement_new->~T();
+            for (int i = index + 1; i < _count_of_elements; i++)
+            {
+                *(_array + index) = std::move(*(_array + index));
+            }
+            
+        }
+    }
+// TEST METHODS
     void test_resize() {
         resize();
     }
@@ -76,8 +119,15 @@ private:
         // std::cout << std::endl;
         for (int i = 0; i < _count_of_elements; i++)
         {
-            T* rep_new = new (temp_array + i) T(*(_array + i));
-
+            T* placement_new = new (temp_array + i) T(*(_array + i));
+            // (temp_array + i)->~T();
+            // TEST START Placement new and copy constructor
+            // T* placement_new = new (temp_array + i) T();
+            // T* old_item = _array + i;
+            // *placement_new = *(old_item);
+            // old_item->~T();
+            // TEST END
+            
             // *(temp_array + i) = *(_array + i);
         }
         // DEBUG START
