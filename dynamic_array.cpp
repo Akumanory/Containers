@@ -40,6 +40,10 @@ public:
         void prev() {
             _position--;
         }
+        
+        void toIndex(int index) {
+            _position = index;
+        }
 
         bool hasNext() const {
             return _array_class->size() > _position;
@@ -90,6 +94,7 @@ public:
                 // std::cout << "in insert " << std::endl;
                 new (_array + i) T(std::move(*(_array + i - 1)));
             }
+            // TODO Убрать move 
             new (_array + index) T(std::move(value));
             _count_of_elements++;
 

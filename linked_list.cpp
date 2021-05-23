@@ -2,7 +2,7 @@
 #include <iostream>
 
 // Сделать около 14
-// const int ARRAY_CAPACITY;
+const int ARRAY_CAPACITY = 5;
 
 #define CHUNK_SIZE(x) (sizeof(Chunk) + (sizeof(T) * ((x) - 1)))
 // #define CHUNK_SIZE(x) (sizeof(Chunk) + (sizeof(T) * x))
@@ -14,13 +14,27 @@ public:
     struct Chunk
     {
         int elements_in_chunk = 0;
-        struct Chunk* next;
-        struct Chunk* prev;
+        Chunk* next;
+        Chunk* prev;
         // 24 - sizeod(Chunk) - пока не знаю как по красивие сделать потому 
         // что если создавать новую переменную то размер чанка выйдет за отметку 24
         // 64 размер кеш линии
-        T data[1];
+        // T data[1];
+        // T data[(64 - sizeof(Chunk) + sizeof(T)) / sizeof(T)];
+        T data[ARRAY_CAPACITY];
     };
+
+    // struct Chunk2
+    // {
+    //     int elements_in_chunk = 0;
+    //     struct Chunk* next;
+    //     // struct Chunk* prev;
+    //     // 24 - sizeod(Chunk) - пока не знаю как по красивие сделать потому 
+    //     // что если создавать новую переменную то размер чанка выйдет за отметку 24
+    //     // 64 размер кеш линии
+    //     // T data[(64 - sizeof(Chunk) + sizeof(T)) / sizeof(T)];
+    //     T data[ARRAY_CAPACITY];
+    // };
 
     class Iterator {
 
@@ -44,7 +58,9 @@ public:
             std::cout << "_array_capacity_of_chunk " << _list_class->_array_capacity_of_chunk << std::endl;
             if (_start_from_head->elements_in_chunk == _list_class->_array_capacity_of_chunk)
             {
-                Chunk* new_chunk = (Chunk *)malloc(CHUNK_SIZE(_list_class->_array_capacity_of_chunk));
+                // Chunk* new_chunk = (Chunk *)malloc(CHUNK_SIZE(_list_class->_array_capacity_of_chunk));
+                Chunk* new_chunk = new Chunk();
+                // Chunk* new_chunk = (Chunk *)malloc(sizeof(Chunk));
                 if (_start_from_head == _list_class->_tail)
                 {
                     _list_class->_tail = new_chunk;
@@ -100,6 +116,7 @@ public:
                         auto temp = _start_from_head;
                         _start_from_head == _start_from_head->prev;
                         free(temp);
+                        // delete[] temp;
                     }
                     else
                     {
@@ -111,6 +128,7 @@ public:
 
                         _start_from_head = _start_from_head->next;
                         free(temp);
+                        // delete[] temp;
                     }
                 }else
                 {
@@ -175,17 +193,36 @@ public:
     Unrolled_List() {
         std::cout << "sizeof(T) " << sizeof(T) << std::endl;
         std::cout << "sizeof(Chunk) " << sizeof(Chunk) - sizeof(T) << std::endl;
+        // std::cout << "sizeof(Chunk2) " << sizeof(Chunk2) << std::endl;
+        std::cout << "sizeof(nullptr) " << sizeof(nullptr) << std::endl;
+
+        // int a = 12;
+        // int* b = &a;
+        // std::cout << "sizeof(int_ptr) " << sizeof(b) << std::endl;
         std::cout << "count of elements for size of " << 40 / sizeof(T) << std::endl;
         // _array_capacity_of_chunk = (64 - sizeof(Chunk)) / sizeof(T);
         // ARRAY_CAPACITY = (64 - 24) / sizeof(T);
         // _list = new Chunk(_array_capacity_of_chunk);
-        _array_capacity_of_chunk = (64 - sizeof(Chunk) + sizeof(T)) / sizeof(T);
-        std::cout << "elements " << _array_capacity_of_chunk << std::endl;
-        _list = (Chunk *)malloc(CHUNK_SIZE(_array_capacity_of_chunk));
-        std::cout << "size of list " << sizeof(*_list) << std::endl;
+
+        _array_capacity_of_chunk = ARRAY_CAPACITY;
+        _list = new Chunk();
+
+        // std::cout << "sizeof(Chunk->prev) " << sizeof(_list->prev) << std::endl;
+        // void* ptr = 
+        
+        // _list = (Chunk *)malloc(sizeof(Chunk));
+        // _list->data = (T)malloc(ARRAY_CAPACITY * (sizeof(T) - 1));
+        // Старая версия не работатет в тестах
+        // _array_capacity_of_chunk = (64 - sizeof(Chunk) + sizeof(T)) / sizeof(T);
+        // std::cout << "elements " << _array_capacity_of_chunk << std::endl;
+        // _list = (Chunk *)malloc(CHUNK_SIZE(_array_capacity_of_chunk));
+        // std::cout << "size of list " << sizeof(*_list) << std::endl;
+
+
         _count_of_elements = 0;
         _head = _list;
         _tail = _list;
+        // std::cout << "Check array " << *(_list->data) << std::endl;
         std::cout << "_head " << _head << std::endl;
         std::cout << "_tail " << _tail << std::endl;
         if (_head == _tail)
@@ -196,29 +233,36 @@ public:
     }
 
     ~Unrolled_List() {
-        std::cout << "_head " << _head << std::endl;
-        std::cout << "_tail " << _tail << std::endl;
+        // std::cout << "_head " << _head << std::endl;
+        // std::cout << "_tail " << _tail << std::endl;
         while (_head != _tail)
         {
-            std::cout << "_head " << _head << std::endl;
-            std::cout << "_tail " << _tail << std::endl;
+            // std::cout << "_head " << _head << std::endl;
+            // std::cout << "_tail " << _tail << std::endl;
             Chunk * temp = _head;
             _head = _head->next;
             free(temp);
+            // delete[] temp;
         }
+        // delete[] _head;
         free(_head);
     }
 
     void insertHead(const T& value) {
+        // std::cout << "Insert head " << std::endl;
         if (_head->elements_in_chunk == _array_capacity_of_chunk)
         {
             auto temp =_head;
-            _head = (Chunk *)malloc(CHUNK_SIZE(_array_capacity_of_chunk));
+            // _head = (Chunk *)malloc(CHUNK_SIZE(_array_capacity_of_chunk));
+            _head = new Chunk();
             temp->prev = _head;
             _head->next = temp;
         }
         T* ptr = _head->data;
+        // std::cout << "Insert head 2" << std::endl;
+        // std::cout << *(ptr + _head->elements_in_chunk) << std::endl;
         new (ptr + _head->elements_in_chunk) T(std::move(value));
+        // std::cout << "Insert head 3" << std::endl;
         _head->elements_in_chunk += 1;
         _count_of_elements++;
     }
@@ -227,7 +271,8 @@ public:
         if (_tail->elements_in_chunk == _array_capacity_of_chunk)
         {
             auto temp =_tail;
-            _tail = (Chunk *)malloc(CHUNK_SIZE(_array_capacity_of_chunk));
+            // _tail = (Chunk *)malloc(CHUNK_SIZE(_array_capacity_of_chunk));
+            _tail = new Chunk();
             temp->next = _tail;
             _tail->prev = temp;
         }
@@ -244,6 +289,7 @@ public:
             _head = _head->next;
             _head->prev = NULL;
             free(temp);
+            // delete[] temp;
         }else
         {
             _head->elements_in_chunk -= 1;
@@ -258,6 +304,7 @@ public:
             _tail = _tail->prev;
             _tail->next = NULL;
             free(temp);
+            // delete[] temp;
         }else
         {
             _tail->elements_in_chunk -= 1;

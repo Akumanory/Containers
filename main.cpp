@@ -6,53 +6,72 @@ int main(int argc, char **argv)
 {
     Unrolled_List<double> a;
 
-    a.insertHead(150);
-    a.insertHead(160);
-    a.insertHead(404);
-    a.insertTail(2);
-    a.insertTail(3);
+    a.insertHead(12);
+    a.insertHead(12);
+    a.insertHead(12);
+    a.insertHead(12);
+    a.insertHead(12);
+    a.insertHead(12);
+    a.insertTail(20);
+    // Unrolled_List<int> uList;
+
+    // int data[12] {12, 24, 1, 5, 12, 56, 654, 9568, 34829, 78, 2313, 3443};
+
+    // for (int i = 0; i < 11; i++)
+    // {
+    //     uList.insertHead(data[i]);
+    // }
 
 
-    a.insertTail(4);
-    // a.insertHead(888);
-    a.insertTail(5);
-    // a.insertTail(6);
-    // a.insertTail(7);
-    // a.insertTail(8);
+    // Unrolled_List<double> a;
+
+    // a.insertHead(150);
+    // a.insertHead(160);
+    // a.insertHead(404);
+    // a.insertTail(2);
+    // a.insertTail(3);
+
+
+    // a.insertTail(4);
+    // // a.insertHead(888);
+    // a.insertTail(5);
+    // // a.insertTail(6);
+    // // a.insertTail(7);
+    // // a.insertTail(8);
     
-    a.print_head_chunk();
-    a.print_tail_chunk();
+    // a.print_head_chunk();
+    // a.print_tail_chunk();
 
-    auto it = a.iterator();
+    // auto it = a.iterator();
 
-    std::cout << "HasNext " << it.hasNext() << std::endl;
-    // std::cout << "HasPrev " << it.hasPrev() << std::endl;
-    std::cout << "Iterator " << std::endl;
-    int i = 0;
-    for (auto it = a.iterator(); it.hasNext(); it.next())
-    {
-        // it.set(12);
-        std::cout << it.get() << std::endl;
-        // it.remove();
-        if(it.get() == 3)
-        {
-            it.remove();
-            // it.insert(5454);
-        }
-        // if (i == 1)
-        // {
-        //     it.insert(5454);
-        // }
-        // i++;
+    // std::cout << "HasNext " << it.hasNext() << std::endl;
+    // // std::cout << "HasPrev " << it.hasPrev() << std::endl;
+    // std::cout << "Iterator " << std::endl;
+    // int i = 0;
+    // for (auto it = a.iterator(); it.hasNext(); it.next())
+    // {
+    //     // it.set(12);
+    //     std::cout << it.get() << std::endl;
+    //     // it.remove();
+    //     if(it.get() == 3)
+    //     {
+    //         it.remove();
+    //         // it.insert(5454);
+    //     }
+    //     // if (i == 1)
+    //     // {
+    //     //     it.insert(5454);
+    //     // }
+    //     // i++;
         
-    }
-    std::cout << " " << std::endl;
-    std::cout << "Iterator2 " << std::endl;
-    for (auto it = a.iterator(); it.hasNext(); it.next())
-    {
-        // it.set(12);
-        std::cout << it.get() << std::endl;   
-    }
+    // }
+    // std::cout << " " << std::endl;
+    // std::cout << "Iterator2 " << std::endl;
+    // for (auto it = a.iterator(); it.hasNext(); it.next())
+    // {
+    //     // it.set(12);
+    //     std::cout << it.get() << std::endl;   
+    // }
     // a.print_head_chunk();
 
     // a.insertHead(404);
